@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soler — Vino Natural & Pizza Italiana | Villa Crespo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wine: #2b1420;
+    --wine-deep: #1a0c14;
+    --amber: #c97a3d;
+    --amber-bright: #e2954f;
+    --parchment: #f2e9dd;
+    --parchment-dim: #d9c9b4;
+    --olive: #5c6b47;
+    --rose: #e8b4b8;
+    --line: rgba(242,233,221,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--wine);
+    color:var(--parchment);
+    font-family:'Inter', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber); color:var(--wine-deep);}
+
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:500; letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    font-size:0.72rem;
+    color:var(--amber-bright);
+  }
+
+  /* ---- wine ring stains, ambient decoration ---- */
+  .ring{
+    position:absolute; border-radius:50%;
+    border:1px solid var(--parchment);
+    opacity:0.06; pointer-events:none;
+  }
+
+  /* ---- nav ---- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 6vw;
+    background:linear-gradient(to bottom, rgba(26,12,20,0.92), transparent);
+    backdrop-filter:blur(2px);
+  }
+  .wordmark{
+    font-family:'Fraunces', serif; font-size:1.4rem; font-weight:600;
+    letter-spacing:0.03em;
+  }
+  .navlinks{display:flex; gap:2.2rem; font-family:'Space Mono', monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em;}
+  .navlinks a{color:var(--parchment-dim); text-decoration:none; transition:color 0.2s;}
+  .navlinks a:hover{color:var(--amber-bright);}
+  .nav-toggle{display:none; background:none; border:none; color:var(--parchment); font-size:1.5rem; cursor:pointer;}
+
+  /* ---- hero ---- */
+  header.hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
+    padding:0 6vw;
+    overflow:hidden;
+  }
+  .hero-inner{position:relative; z-index:2; max-width:820px;}
+  .hero-inner .eyebrow{display:block; margin-bottom:1.2rem;}
+  header.hero h1{
+    font-size:clamp(3.2rem, 9vw, 7.5rem);
+    line-height:0.92;
+    color:var(--parchment);
+  }
+  header.hero h1 em{
+    font-style:italic; font-weight:400; color:var(--amber-bright);
+  }
+  .hero-sub{
+    margin-top:1.6rem; max-width:480px;
+    font-size:1.05rem; line-height:1.6; color:var(--parchment-dim);
+  }
+  .hero-meta{
+    display:flex; flex-wrap:wrap; gap:2.4rem; margin-top:2.6rem;
+    font-family:'Space Mono', monospace; font-size:0.8rem; color:var(--parchment-dim);
+  }
+  .hero-meta strong{display:block; color:var(--parchment); font-size:1.1rem; font-family:'Fraunces', serif;}
+  .cta-row{display:flex; gap:1rem; margin-top:2.6rem; flex-wrap:wrap;}
+  .btn{
+    font-family:'Space Mono', monospace; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em;
+    padding:0.95rem 1.8rem; border-radius:2px; text-decoration:none; transition:all 0.25s ease;
+    display:inline-block; border:1px solid transparent;
+  }
+  .btn-fill{background:var(--amber); color:var(--wine-deep);}
+  .btn-fill:hover{background:var(--amber-bright); transform:translateY(-2px);}
+  .btn-line{border-color:var(--parchment-dim); color:var(--parchment);}
+  .btn-line:hover{border-color:var(--amber-bright); color:var(--amber-bright);}
+
+  /* vinyl record — signature element */
+  .vinyl-wrap{
+    position:absolute; right:6vw; top:50%; transform:translateY(-50%);
+    width:min(34vw, 420px); height:min(34vw, 420px);
+    z-index:1;
+  }
+  .vinyl{
+    width:100%; height:100%; border-radius:50%;
+    background:
+      repeating-radial-gradient(circle at center, #100608 0, #100608 2px, #1c0c12 3px, #1c0c12 4px);
+    box-shadow:0 40px 90px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(242,233,221,0.06);
+    position:relative;
+    animation:spin 14s linear infinite;
+  }
+  .vinyl::before{
+    content:''; position:absolute; inset:38%; border-radius:50%;
+    background:radial-gradient(circle at 40% 35%, var(--amber-bright), var(--wine) 70%);
+  }
+  .vinyl::after{
+    content:''; position:absolute; inset:47%; border-radius:50%; background:var(--wine-deep);
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  @media (prefers-reduced-motion:reduce){ .vinyl{animation:none;} }
+
+  .scroll-cue{
+    position:absolute; bottom:2.4rem; left:6vw; font-family:'Space Mono', monospace;
+    font-size:0.7rem; letter-spacing:0.1em; color:var(--parchment-dim); z-index:2;
+  }
+
+  /* ---- generic section ---- */
+  section{position:relative; padding:7rem 6vw;}
+  .section-head{max-width:600px; margin-bottom:3.5rem;}
+  .section-head h2{font-size:clamp(2rem, 4vw, 3rem); margin-top:0.6rem;}
+  .section-head p{margin-top:1rem; color:var(--parchment-dim); line-height:1.6; max-width:520px;}
+
+  /* ---- about ---- */
+  .about{
+    background:var(--wine-deep);
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:4rem; align-items:center;
+  }
+  .about-copy p{line-height:1.85; color:var(--parchment-dim); font-size:1.02rem; margin-bottom:1.2rem;}
+  .about-copy p strong{color:var(--parchment); font-weight:500;}
+  .tags{display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1.8rem;}
+  .tag{
+    font-family:'Space Mono', monospace; font-size:0.7rem; letter-spacing:0.06em;
+    border:1px solid var(--line); padding:0.45rem 0.9rem; border-radius:999px; color:var(--parchment-dim);
+  }
+  .about-panel{
+    border:1px solid var(--line); padding:2.4rem; position:relative;
+    background:linear-gradient(160deg, rgba(201,122,61,0.07), transparent);
+  }
+  .about-panel .num{
+    font-family:'Fraunces', serif; font-size:3.2rem; color:var(--amber-bright); line-height:1;
+  }
+  .about-panel-row{display:flex; justify-content:space-between; align-items:baseline; padding:1.1rem 0; border-bottom:1px solid var(--line);}
+  .about-panel-row:last-child{border-bottom:none;}
+  .about-panel-row .lbl{font-family:'Space Mono', monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--parchment-dim);}
+  .about-panel-row .val{font-family:'Fraunces', serif; font-size:1.3rem;}
+
+  /* ---- menu ---- */
+  .menu-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .menu-card{background:var(--wine); padding:2.6rem; position:relative; transition:background 0.25s;}
+  .menu-card:hover{background:var(--wine-deep);}
+  .menu-card .eyebrow{margin-bottom:0.8rem;}
+  .menu-card h3{font-size:1.7rem; margin-bottom:0.7rem;}
+  .menu-card p{color:var(--parchment-dim); line-height:1.6; font-size:0.95rem;}
+  .menu-card .ring-deco{position:absolute; right:-30px; bottom:-40px; width:140px; height:140px;}
+
+  /* ---- wine section ---- */
+  .wine-section{
+    background:var(--wine-deep);
+  }
+  .wine-list{
+    display:flex; flex-direction:column; gap:0; border-top:1px solid var(--line);
+  }
+  .wine-row{
+    display:grid; grid-template-columns:auto 1fr auto; gap:1.6rem; align-items:baseline;
+    padding:1.5rem 0; border-bottom:1px solid var(--line);
+    font-family:'Space Mono', monospace;
+  }
+  .wine-row .type{color:var(--olive); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; min-width:120px;}
+  .wine-row .desc{color:var(--parchment-dim); font-size:0.92rem; font-family:'Inter', sans-serif; font-weight:300;}
+  .wine-row .sommelier{color:var(--amber-bright); font-size:0.72rem;}
+
+  /* ---- music ---- */
+  .music{
+    display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;
+  }
+  .music-visual{
+    aspect-ratio:1/1; border-radius:50%; border:1px dashed var(--line);
+    display:flex; align-items:center; justify-content:center; position:relative; max-width:360px;
+  }
+  .music-visual .ring{opacity:0.15;}
+  .music-visual .center-dot{width:10px; height:10px; border-radius:50%; background:var(--amber-bright);}
+  .music-days{display:flex; flex-direction:column; gap:1rem; margin-top:2rem;}
+  .music-day{display:flex; justify-content:space-between; padding:1rem 0; border-bottom:1px solid var(--line); font-family:'Space Mono', monospace; font-size:0.85rem;}
+  .music-day span:first-child{color:var(--parchment);}
+  .music-day span:last-child{color:var(--parchment-dim);}
+
+  /* ---- reviews ---- */
+  .reviews{background:var(--wine-deep);}
+  .reviews-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem;}
+  .review-card{
+    border:1px solid var(--line); padding:2.2rem; position:relative;
+  }
+  .review-card .stars{color:var(--amber-bright); font-family:'Space Mono', monospace; letter-spacing:0.15em; margin-bottom:1.2rem; font-size:0.9rem;}
+  .review-card p{font-family:'Fraunces', serif; font-style:italic; font-size:1.08rem; line-height:1.6; color:var(--parchment);}
+  .review-card .who{margin-top:1.4rem; font-family:'Space Mono', monospace; font-size:0.72rem; color:var(--parchment-dim); text-transform:uppercase; letter-spacing:0.06em;}
+
+  /* ---- location ---- */
+  .location{
+    display:grid; grid-template-columns:0.9fr 1.1fr; gap:0; border-top:1px solid var(--line);
+  }
+  .location-info{padding:5rem 6vw 5rem 6vw;}
+  .location-info .row{padding:1.4rem 0; border-bottom:1px solid var(--line);}
+  .location-info .row .lbl{font-family:'Space Mono', monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--amber-bright); margin-bottom:0.4rem;}
+  .location-info .row .val{font-family:'Fraunces', serif; font-size:1.2rem;}
+  .map-frame{border:none; width:100%; height:100%; min-height:420px; filter:grayscale(0.4) sepia(0.15) contrast(1.05);}
+
+  footer{
+    padding:3.5rem 6vw; display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--line); font-family:'Space Mono', monospace; font-size:0.72rem; color:var(--parchment-dim);
+    flex-wrap:wrap; gap:1rem;
+  }
+  footer a{color:var(--parchment-dim);}
+
+  @media (max-width:860px){
+    .navlinks{display:none;}
+    .about, .music, .location{grid-template-columns:1fr;}
+    .menu-grid{grid-template-columns:1fr;}
+    .reviews-grid{grid-template-columns:1fr;}
+    .vinyl-wrap{opacity:0.35; width:60vw; height:60vw; right:-10vw;}
+    .location-info{padding:3.5rem 6vw;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark">Soler</div>
+  <div class="navlinks">
+    <a href="#about">Concepto</a>
+    <a href="#menu">Menú</a>
+    <a href="#vinos">Vinos</a>
+    <a href="#musica">Música</a>
+    <a href="#reseñas">Reseñas</a>
+    <a href="#ubicacion">Ubicación</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="ring" style="width:520px; height:520px; top:-140px; left:-160px;"></div>
+  <div class="ring" style="width:300px; height:300px; bottom:-80px; left:20%;"></div>
+  <div class="hero-inner">
+    <span class="eyebrow">Villa Crespo — Vinoteca &amp; Pizzería</span>
+    <h1>Vino <em>natural.</em><br>Pizza al fuego.<br>Jazz de fondo.</h1>
+    <p class="hero-sub">Una barra de vinos naturales y una pizza napoletana bien hecha, en Darwin 996. Sin vueltas, con buena mesa y buena música en vivo los miércoles.</p>
+    <div class="hero-meta">
+      <div><strong>4.1 ★</strong>127 opiniones en Google</div>
+      <div><strong>$10.000–50.000</strong>por persona</div>
+      <div><strong>Mar–Dom</strong>desde las 12 h</div>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-fill" href="#ubicacion">Reservar mesa</a>
+      <a class="btn btn-line" href="#menu">Ver el menú</a>
+    </div>
+  </div>
+  <div class="vinyl-wrap"><div class="vinyl"></div></div>
+  <div class="scroll-cue">↓ desplazate</div>
+</header>
+
+<section class="about" id="about">
+  <div class="about-copy">
+    <span class="eyebrow">El concepto</span>
+    <h2 style="margin:0.8rem 0 1.6rem;">No es una vinoteca con pizza.<br>Es una pizzería que entiende de vino.</h2>
+    <p>En Soler la carta de vinos no acompaña al menú: lo conduce. Trabajamos con <strong>productores chicos y vinos naturales</strong>, elegidos por un sommelier que va mesa por mesa, no una carta cerrada de bodegas grandes.</p>
+    <p>La cocina responde con <strong>masa madre de larga fermentación</strong>, horno a leña y una carta acotada de pizzas y focaccias que cambia según lo que llega fresco. Los miércoles hay jazz en vivo y, de tanto en tanto, una noche de bossa nova.</p>
+    <div class="tags">
+      <span class="tag">Vino natural</span>
+      <span class="tag">Pizza napoletana</span>
+      <span class="tag">Jazz en vivo</span>
+      <span class="tag">Sommelier en sala</span>
+      <span class="tag">LGBTQ+ friendly</span>
+    </div>
+  </div>
+  <div class="about-panel">
+    <div class="about-panel-row"><span class="lbl">Calificación</span><span class="val">4.1 / 5</span></div>
+    <div class="about-panel-row"><span class="lbl">Opiniones</span><span class="val">127</span></div>
+    <div class="about-panel-row"><span class="lbl">Consumo promedio</span><span class="val">$10k–50k</span></div>
+    <div class="about-panel-row"><span class="lbl">Modalidades</span><span class="val">Salón · Retiro · Delivery</span></div>
+    <div class="about-panel-row"><span class="lbl">Teléfono</span><span class="val">011 6103-1062</span></div>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="section-head">
+    <span class="eyebrow">De la carta</span>
+    <h2>Lo que más se pide</h2>
+    <p>Una selección acotada a propósito: menos variedad, mejor masa. Estas son las cuatro que no pueden faltar.</p>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card">
+      <span class="eyebrow">Clásica de autor</span>
+      <h3>Pizza de Berenjenas</h3>
+      <p>Berenjenas asadas, provolone ahumado y un hilo de miel picante sobre masa madre. La más pedida por lejos.</p>
+    </div>
+    <div class="menu-card">
+      <span class="eyebrow">Para picar y compartir</span>
+      <h3>Focaccia</h3>
+      <p>Alta, aireada y con costra crocante. Se sirve con aceite de oliva de la casa, ideal para abrir la mesa mientras llega el vino.</p>
+    </div>
+    <div class="menu-card">
+      <span class="eyebrow">Napoletana clásica</span>
+      <h3>Diavola</h3>
+      <p>Salame picante, mozzarella fior di latte y orégano fresco. La que pide quien busca calor, no vueltas.</p>
+    </div>
+    <div class="menu-card">
+      <span class="eyebrow">La favorita de la casa</span>
+      <h3>Pizza de Stracciatella</h3>
+      <p>Base de tomate liviana, stracciatella fresca al salir del horno y albahaca. Cremosa, simple, redonda.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wine-section" id="vinos">
+  <div class="section-head">
+    <span class="eyebrow">La barra de vinos</span>
+    <h2>Vino natural, curado copa a copa</h2>
+    <p>Cambiamos la carta seguido porque trabajamos con partidas chicas. Esto es lo que suele estar en barra.</p>
+  </div>
+  <div class="wine-list">
+    <div class="wine-row"><span class="type">Tinto natural</span><span class="desc">Vinos de baja intervención, con cuerpo pero sin maquillaje de madera. Ideales con la Diavola.</span><span class="sommelier">Recomendado por el sommelier</span></div>
+    <div class="wine-row"><span class="type">Blanco de piel</span><span class="desc">Orange wines de productores chicos, con textura y algo de tanino. El match natural de la Focaccia.</span><span class="sommelier">Pedido frecuente</span></div>
+    <div class="wine-row"><span class="type">Espumante</span><span class="desc">Método ancestral, seco y con burbuja fina. Abre bien la noche antes de que llegue la pizza.</span><span class="sommelier">Para empezar</span></div>
+    <div class="wine-row"><span class="type">Vermut de la casa</span><span class="desc">Con soda y una picadita chica, para la previa en la vereda de Darwin.</span><span class="sommelier">Clásico del local</span></div>
+  </div>
+</section>
+
+<section class="music" id="musica">
+  <div>
+    <span class="eyebrow">Música en vivo</span>
+    <h2 style="margin:0.8rem 0 1.4rem;">El vino suena mejor con jazz</h2>
+    <p style="color:var(--parchment-dim); line-height:1.7; max-width:440px;">Pocas mesas, formato íntimo. Los músicos tocan cerca de la barra, sin escenario que separe. Conviene reservar los miércoles.</p>
+    <div class="music-days">
+      <div class="music-day"><span>Miércoles</span><span>Jazz en vivo</span></div>
+      <div class="music-day"><span>Ocasional</span><span>Noche de bossa nova</span></div>
+      <div class="music-day"><span>Resto de la semana</span><span>Playlist de la casa</span></div>
+    </div>
+  </div>
+  <div class="music-visual">
+    <div class="ring" style="width:100%; height:100%; top:0; left:0;"></div>
+    <div class="ring" style="width:70%; height:70%; top:15%; left:15%;"></div>
+    <div class="ring" style="width:40%; height:40%; top:30%; left:30%;"></div>
+    <div class="center-dot"></div>
+  </div>
+</section>
+
+<section class="reviews" id="reseñas">
+  <div class="section-head">
+    <span class="eyebrow">Lo que dicen</span>
+    <h2>127 opiniones, 4.1 en Google</h2>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>"La pizza de stracciatella es un batazo, con una masa muy lograda. Los vinos naturales acompañan perfecto, y las noches de jazz son un planazo."</p>
+      <div class="who">Local Guide · Google Maps</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★☆</div>
+      <p>"Vinimos por un show íntimo de bossa nova: pocas mesas, buen vino, muy buena pizza. Tiene un precio elevado, pero se nota en la calidad del producto."</p>
+      <div class="who">Local Guide · Google Maps</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>"Lugar hermoso, con música en vivo y una atención excelente. El sommelier estuvo muy encima de la mesa, recomendando bien cada copa."</p>
+      <div class="who">Local Guide · Google Maps</div>
+    </div>
+  </div>
+</section>
+
+<section class="location" id="ubicacion" style="padding:0;">
+  <div class="location-info">
+    <span class="eyebrow">Visitanos</span>
+    <h2 style="margin:0.8rem 0 2rem;">Darwin 996, Villa Crespo</h2>
+    <div class="row"><div class="lbl">Dirección</div><div class="val">Darwin 996, C1414, CABA</div></div>
+    <div class="row"><div class="lbl">Teléfono</div><div class="val">011 6103-1062</div></div>
+    <div class="row"><div class="lbl">Horario</div><div class="val">Todos los días desde las 12 h</div></div>
+    <div class="row"><div class="lbl">Modalidades</div><div class="val">Salón · Retiro en puerta · Delivery</div></div>
+    <div class="cta-row">
+      <a class="btn btn-fill" href="tel:+541161031062">Llamar y reservar</a>
+      <a class="btn btn-line" href="https://www.google.com/maps/dir/?api=1&destination=Darwin+996+CABA" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+  </div>
+  <iframe class="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps?q=Darwin+996,+C1414+Buenos+Aires&output=embed"></iframe>
+</section>
+
+<footer>
+  <div>© Soler — Vino Natural &amp; Pizza Italiana · Villa Crespo, Buenos Aires</div>
+  <div><a href="tel:+541161031062">011 6103-1062</a> · Darwin 996, CABA</div>
+</footer>
+
+</body>
+</html>
